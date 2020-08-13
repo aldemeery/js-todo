@@ -17,7 +17,7 @@
 
 ## Demo
 
-![Demo GIF](./demo.gif)
+![Demo GIF](./project-demo.gif)
 
 ## Getting Started
 
