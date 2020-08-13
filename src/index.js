@@ -9,6 +9,7 @@ function render() {
   Item.toArray().forEach((item) => {
     const tr = item.render();
     const td = document.createElement('td');
+
     const remove = document.createElement('a');
     remove.addEventListener('click', (e) => {
       e.preventDefault();
@@ -26,16 +27,31 @@ function render() {
     });
     toggle.innerHTML = 'Toggle';
 
+    const edit = document.createElement('a');
+    edit.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const form = document.querySelector('.form');
+      form.elements.id.value = item.id;
+      form.elements.title.value = item.title;
+      [form.elements.date.value] = item.date.toISOString().split('T');
+      form.elements.priority.value = item.priority;
+      form.elements.done.value = item.done;
+    });
+    edit.innerHTML = 'Edit';
+
     td.append(remove);
     td.appendChild(document.createTextNode(' | '));
     td.append(toggle);
+    td.appendChild(document.createTextNode(' | '));
+    td.append(edit);
 
     tr.append(td);
     body.append(tr);
   });
 }
 
-function addItemtoLibrary(data) {
+function addItemToLibrary(data) {
   new Item(data).save();
 }
 
@@ -44,12 +60,16 @@ form.onsubmit = (e) => {
   e.preventDefault();
 
   const {
+    id,
+    done,
     title,
     date,
     priority,
   } = e.target.elements;
 
-  addItemtoLibrary({
+  addItemToLibrary({
+    id: id.value,
+    done: done.value,
     title: title.value,
     date: date.value,
     priority: priority.value,

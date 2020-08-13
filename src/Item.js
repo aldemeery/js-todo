@@ -1,6 +1,6 @@
 class Item {
   constructor(data = {}) {
-    this.id = data.id;
+    this.id = parseInt(data.id, 10) || undefined;
     this.title = data.title;
     this.date = new Date(data.date);
     this.priority = data.priority;
