@@ -7,9 +7,9 @@
 
 ## Built With
 
--   HTML5
--   CSS3
--   Javascript
+- HTML5
+- CSS3
+- Javascript
 
 ## Live Demo
 
@@ -26,9 +26,11 @@ In order to start this project, you will need:
 ```bash
 $ git clone https://github.com/aldemeery/js-todo.git
 $ cd js-todo
+$ npm install
+$ npm run dev
 ```
 
-and then open the `index.html` file.
+and then open `localhost:8000` in your browser.
 
 ## Deployed on GitHub Pages
 
