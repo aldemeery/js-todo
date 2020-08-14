@@ -1,3 +1,5 @@
+import Storage from './Storage';
+
 class Item {
   constructor(data = {}) {
     this.id = parseInt(data.id, 10) || undefined;
@@ -62,13 +64,12 @@ class Item {
       const keys = Object.keys(Item.all()).concat([0]);
       this.id = Math.max(...keys) + 1;
     }
-    Item.all()[this.id] = this.literal();
-
+    Storage.set(this.id, this.literal());
     return this;
   }
 
   destroy() {
-    delete Item.all()[this.id];
+    Storage.destroy(this.id);
   }
 
   isRead() {
@@ -98,7 +99,7 @@ class Item {
   }
 
   static all() {
-    const items = window[window.storage] || (window[window.storage] = {});
+    const items = Storage.all();
     Object.keys(items).forEach((key) => {
       items[key] = Item.hydrate(items[key]);
     });
@@ -107,7 +108,7 @@ class Item {
   }
 
   static destroy(id) {
-    delete Item.all()[id];
+    Storage.destroy(id);
   }
 
   static toArray() {

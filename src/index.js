@@ -1,7 +1,11 @@
 import './style.css';
 import Item from './Item';
+import Storage from './Storage';
 
 window.storage = 'default';
+if (!localStorage.getItem('projects')) {
+  localStorage.setItem('projects', '');
+}
 
 function render() {
   const body = document.getElementById('body');
@@ -55,6 +59,51 @@ function addItemToLibrary(data) {
   new Item(data).save();
 }
 
+const switchProject = (e) => {
+  e.preventDefault();
+  const { name } = e.target.dataset;
+
+  if (Storage.has(name) || name === 'default') {
+    document.querySelector('.current-project').innerHTML = `(${name})`;
+    window.storage = name;
+  }
+
+  render();
+};
+
+const deleteProject = (e) => {
+  e.preventDefault();
+
+  const { name } = e.target.dataset;
+
+  if (name !== 'default') {
+    document.querySelector('.current-project').innerHTML = '(Default)';
+    window.storage = 'default';
+    Storage.remove(name);
+    const projectsString = localStorage.getItem('projects') || '';
+    const projectsArray = projectsString.split(',').filter(i => i);
+    if (projectsArray.indexOf(name) > -1) {
+      delete projectsArray[projectsArray.indexOf(name)];
+    }
+    localStorage.setItem('projects', projectsArray.join(','));
+    e.target.remove();
+  }
+
+  render();
+};
+
+function renderProject(value) {
+  const a = document.createElement('a');
+  a.href = '#';
+  a.classList = 'project-name tooltip';
+  a.dataset.name = value;
+  a.innerHTML = `${value}<span class="tooltiptext">Right-click to delete</span>`;
+  a.addEventListener('contextmenu', deleteProject);
+  a.addEventListener('click', switchProject);
+
+  return a;
+}
+
 const form = document.querySelector('.form');
 form.onsubmit = (e) => {
   e.preventDefault();
@@ -80,50 +129,20 @@ form.onsubmit = (e) => {
   render();
 };
 
-const switchProject = (e) => {
-  e.preventDefault();
-  const { name } = e.target.dataset;
-
-  if (window[name]) {
-    document.querySelector('.current-project').innerHTML = `(${name})`;
-    window.storage = name;
-  }
-
-  render();
-};
-
-const deleteProject = (e) => {
-  e.preventDefault();
-
-  const { name } = e.target.dataset;
-
-  if (name !== 'default') {
-    document.querySelector('.current-project').innerHTML = '(Default)';
-    window.storage = 'default';
-    delete window[name];
-    e.target.remove();
-  }
-
-  render();
-};
-
 const projectsForm = document.querySelector('.projects-form');
 projectsForm.onsubmit = (e) => {
   e.preventDefault();
   const { title } = e.target.elements;
   const value = title.value.toLowerCase();
 
-  if (!window[value]) {
-    window[value] = {};
-    const a = document.createElement('a');
-    a.href = '#';
-    a.classList = 'project-name tooltip';
-    a.dataset.name = value;
-    a.innerHTML = `${value}<span class="tooltiptext">Right-click to delete</span>`;
-    a.addEventListener('contextmenu', deleteProject);
-    a.addEventListener('click', switchProject);
+  if (!Storage.has(value)) {
+    Storage.add(value);
+    const projectsString = localStorage.getItem('projects') || '';
+    const values = projectsString.split(',');
+    values.push(value);
+    localStorage.setItem('projects', values.join(','));
 
-    document.querySelector('.projects').appendChild(a);
+    document.querySelector('.projects').appendChild(renderProject(value));
   }
 
   e.target.reset();
@@ -132,6 +151,13 @@ projectsForm.onsubmit = (e) => {
 document.querySelectorAll('.project-name').forEach(a => {
   a.addEventListener('contextmenu', deleteProject);
   a.addEventListener('click', switchProject);
+});
+
+const projects = document.querySelector('.projects');
+localStorage.getItem('projects').split(',').forEach(name => {
+  if (name) {
+    projects.appendChild(renderProject(name));
+  }
 });
 
 render();
