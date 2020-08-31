@@ -1,0 +1,98 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+.add {
+  margin-bottom: 10px;
+}
+
+.add:hover {
+  cursor: pointer;
+}
+
+.projects {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.projects li {
+  margin-right: 20px;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.current-project {
+  text-transform: capitalize;
+}
+
+.project-name {
+  padding: 5px 10px;
+  background-color: darkslategrey;
+  margin-right: 5px;
+  text-transform: capitalize;
+}
+
+.form input[type="number"] {
+  max-width: 75px;
+}
+
+.green {
+  color: greenyellow;
+}
+
+.red {
+  color: red;
+}
+
+td {
+  max-width: 300px;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
